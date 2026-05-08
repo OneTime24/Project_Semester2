@@ -1,0 +1,23 @@
+# compiled binary
+lms
+
+# object files
+*.o
+
+# vscode
+.vscode/
+
+# build folders
+build/
+
+# temporary files
+*.tmp
+
+# linux generated
+a.out
+
+# submissions
+submission/
+
+# optional runtime data
+data/*.txt
