@@ -1,4 +1,4 @@
-# Student Management System
+#CoreLMS
 
 A console-based **Student Management System** developed in **C++** as a second-semester **Object-Oriented Programming (OOP)** project at FAST NUCES.
 
@@ -8,7 +8,7 @@ The project demonstrates the practical implementation of core OOP concepts inclu
 
 ## 📖 Overview
 
-The Student Management System provides separate portals for different types of users:
+TheCoreLMS provides separate portals for different types of users:
 
 - **Admin**
 - **Teacher**
