@@ -8,7 +8,7 @@
 
 using namespace std;
 
-teacher::teacher(string u, string p) : User(u,p,"teacher") {}
+teacher::teacher(string u, string p) : User(u,p,"teacher") {}           //constructor
 
 void teacher::menu() {
 
@@ -140,7 +140,7 @@ void teacher::createassignment(){
 
         stringstream ss(line);
 
-        // ✅ FIXED PIPE PARSING
+        // IXED PIPE PARSING
         getline(ss, id, '|');
         getline(ss, name, '|');
         getline(ss, tname, '|');
@@ -166,7 +166,6 @@ void teacher::createassignment(){
 
     ofstream out("data/assignments.txt", ios::app);
 
-    // ✅ FIXED FORMAT
     out << courseid << "|" << title << endl;
 
     out.close();
@@ -179,11 +178,10 @@ void teacher::viewassignment(){
     ifstream course("data/course.txt");
     ifstream assign("data/assignments.txt");
 
-    vector<string> mycourses;
+    vector<string> mycourses;           //to store courses dynamically
 
     string line;
 
-    // ✅ FIXED COURSE PARSING
     while(getline(course, line)){
 
         string cid, cname, tname;
@@ -196,7 +194,7 @@ void teacher::viewassignment(){
 
         if(tname == username){
 
-            mycourses.push_back(cid);
+            mycourses.push_back(cid);       //add at the end of the array
         }
     }
 
@@ -208,7 +206,6 @@ void teacher::viewassignment(){
 
         stringstream ss(line);
 
-        // ✅ FIXED ASSIGNMENT PARSING
         getline(ss, aid, '|');
         getline(ss, title, '|');
 
@@ -230,11 +227,10 @@ void teacher::viewsubmission(){
     ifstream sub("data/submission.txt");
     ifstream course("data/course.txt");
 
-    vector<string> mycourse;
+    vector<string> mycourse;        //dynamic array to store courses
 
     string line;
 
-    // ✅ FIXED COURSE PARSING
     while(getline(course, line)){
 
         string cid, cname, tname;
@@ -247,7 +243,7 @@ void teacher::viewsubmission(){
 
         if(tname == username){
 
-            mycourse.push_back(cid);
+            mycourse.push_back(cid);        //add at the end of the array
         }
     }
 
@@ -279,9 +275,9 @@ void teacher::viewsubmission(){
         getline(ss, marks, '|');
         getline(ss, feedback, '|');
 
-        for(int i=0; i<mycourse.size(); i++){
+        for(int i=0; i<mycourse.size(); i++){       //loopinh through all courses
 
-            if(courseid == mycourse[i]){
+            if(courseid == mycourse[i]){    //if found
 
                 cout << count << ". "
                      << student << " | "
@@ -289,7 +285,7 @@ void teacher::viewsubmission(){
                      << plag << "% | Marks: "
                      << marks << endl;
 
-                allLines.push_back(line);
+                allLines.push_back(line);       //add the line at the end of the array
 
                 count++;
 
@@ -333,9 +329,9 @@ void teacher::viewsubmission(){
 
     cout << "\nOpening File...\n";
 
-    string command = "xdg-open \"" + filepath + "\"";
+    string command = "xdg-open \"" + filepath + "\"";       //opening  the file for linux
 
-    system(command.c_str());
+    system(command.c_str());        //returns const char pointer
 
     string newmarks;
     string newfeed;
@@ -389,7 +385,7 @@ void teacher::viewsubmission(){
     temp.close();
 
     remove("data/submission.txt");
-    rename("data/temp.txt", "data/submission.txt");
+    rename("data/temp.txt", "data/submission.txt");     //update the marks and rename it to previous onw also delete old one
 
     cout << "\nSubmission Checked Successfully!\n";
 }
@@ -403,7 +399,6 @@ void teacher::viewq(){
 
     string line;
 
-    // ✅ FIXED COURSE PARSING
     while(getline(course, line)){
 
         string cid, cname, tname;
@@ -460,7 +455,6 @@ void teacher::ansq(){
 
     string line;
 
-    // ✅ FIXED COURSE PARSING
     while(getline(course, line)){
 
         string cid, cname, tname;
@@ -489,7 +483,7 @@ void teacher::ansq(){
 
         stringstream ss(line);
 
-        // ✅ FIXED MISSING STUDENT PARSING BUG
+        // FIXED MISSING STUDENT PARSING BUG
         getline(ss, stden, '|');
 
         getline(ss, cid2, '|');

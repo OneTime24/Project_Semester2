@@ -52,7 +52,6 @@ void announcement::viewstd(string username){
             string usr, course;
             bool found = false;
 
-            // ✅ FIX: proper parsing (was broken before)
             while(enrol >> usr >> course){
                 if(usr == username && course == cid){
                     found = true;

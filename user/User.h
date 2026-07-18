@@ -19,7 +19,7 @@ class User{
     string getusername();
     string getrole();
 
-    virtual void menu()=0;
+    virtual void menu()=0;      //pure function: inheritence
 
 };
 

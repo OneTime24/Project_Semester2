@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// ✅ REQUIRED FOR PLAGIARISM ENGINE
+//  FOR PLAGIARISM ENGINE
 FILE* fp_rep = NULL;
 
 int main(){
@@ -13,7 +13,7 @@ int main(){
 
     while(true){
 
-        User* u = auth::login();
+        User* u = auth::login();           
 
         if(!u){
 

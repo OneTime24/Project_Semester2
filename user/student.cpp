@@ -1,13 +1,6 @@
 #include "student.h"
 #include "../announcement/announcement.h"
 
-#include <filesystem>
-#include <sstream>
-#include <fstream>
-#include <cstdio>
-#include <vector>
-#include <memory>
-#include <array>
 
 namespace fs = std::filesystem;
 
@@ -16,7 +9,7 @@ string pickfile(){
     string result;
 
     FILE* pipe = popen(
-        "zenity --file-selection --title='Select Assignment File'",
+        "zenity --file-selection --title='Select Assignment File'",     //using zenity fedora package
         "r"
     );
 
@@ -24,7 +17,7 @@ string pickfile(){
         return "";
     }
 
-    char buffer[256];
+    char buffer[256];   //temp waiting area
 
     while(fgets(buffer, sizeof(buffer), pipe) != NULL){
         result += buffer;
@@ -34,7 +27,7 @@ string pickfile(){
 
     // remove newline
     if(!result.empty() && result[result.length()-1] == '\n'){
-        result.erase(result.length()-1);
+        result.erase(result.length()-1);        //new line rmoved
     }
 
     return result;
@@ -123,7 +116,6 @@ void student::viewcourse(){
 
         stringstream ss(line);
 
-        // ✅ FIX:
         // PIPE FORMAT PARSING
 
         getline(ss, id, '|');
@@ -149,8 +141,6 @@ void student::viewmycourse(){
 
         stringstream ss(line);
 
-        // ✅ FIX:
-        // PIPE PARSING
 
         getline(ss, user, '|');
         getline(ss, course, '|');
@@ -176,8 +166,8 @@ void student::enrollcourse(){
     string line;
     bool already = false;
 
-    // ✅ FIX:
-    // NOW USING PIPE PARSING
+    // fIX:
+    //  USING PIPE PARSING
 
     while(getline(file, line)){
 
@@ -205,8 +195,6 @@ void student::enrollcourse(){
 
     ofstream out("data/enrollments.txt",ios::app);
 
-    // ✅ FIX:
-    // STORE IN PIPE FORMAT
 
     out << username << "|" << courseid << endl;
 
@@ -224,8 +212,6 @@ void student::viewassign(){
 
     vector<string> mycourse;
 
-    // ✅ FIX:
-    // PIPE PARSING FOR ENROLLMENTS
 
     while(getline(enroll, line)){
 
@@ -252,8 +238,6 @@ void student::viewassign(){
 
     bool found = false;
 
-    // ✅ FIX:
-    // PIPE PARSING FOR ASSIGNMENTS
 
     while(getline(assign, line)){
 
@@ -328,7 +312,7 @@ void student::viewassign(){
 // }
 
 
-
+//correct version
 void student::submitassign(){
 
     string courseid, assign;
@@ -341,7 +325,7 @@ void student::submitassign(){
 
 
     cout << "Opening File Picker...\n";
-    string fp = pickfile();
+    string fp = pickfile();     //using system file picker to select file
 
     if(fp == ""){
         cout << "No file selected!\n";
@@ -363,7 +347,8 @@ cout << "Selected File: " << fp << endl;
 
     string extension = fs::path(fp).extension().string();
      for (char &c : assign) {
-        if (c == ' ') c = '_';
+        if (c == ' ') 
+        c = '_';
     }
 
     string newfile = username + "_" + assign + "_" + courseid + extension;
@@ -371,7 +356,7 @@ cout << "Selected File: " << fp << endl;
 
         // copy file into LMS system folder
 
-
+        //exception handling
     try {
         fs::copy(fp, newpath, fs::copy_options::overwrite_existing);
     }
@@ -415,7 +400,6 @@ cout << "Selected File: " << fp << endl;
     // save submission
     ofstream out("data/submission.txt", ios::app);
 
-    // ✅ FIX:
 // STORE LMS FILE PATH NOT ORIGINAL PATH
 
     out << username << "|"
@@ -432,108 +416,6 @@ cout << "Selected File: " << fp << endl;
 
 }
 
-
-// void student::viewresult() {
-//     ifstream file("data/submission.txt");
-//     if (!file) {
-//         cout << "Cannot open file\n";
-//         return;
-//     }
-
-//     cout << "\n======= MY RESULTS =======\n";
-
-//     vector<string> seenAssignments;
-//     string line;
-
-//     while (getline(file, line)) {
-//         // Parse current line
-//         string studentID, courseID, assignment, filePath, plagiarism, marks, feedback;
-//         stringstream ss(line);
-//         getline(ss, studentID,  '|');
-//         getline(ss, courseID,   '|');
-//         getline(ss, assignment, '|');
-//         getline(ss, filePath,   '|');
-//         getline(ss, plagiarism, '|');
-//         getline(ss, marks,      '|');
-//         getline(ss, feedback,   '|');
-
-//         // Skip if we already processed this assignment
-//         bool alreadySeen = false;
-//         for (string& a : seenAssignments) {
-//             if (a == assignment) {
-//                 alreadySeen = true;
-//                 break;
-//             }
-//         }
-//         if (alreadySeen) continue;
-//         seenAssignments.push_back(assignment);
-
-//         // Go through the whole file to collect stats for this assignment
-//         float myMarks     = -1;
-//         string myFeedback = "";
-//         float highest     = -1;
-//         float lowest      = 9999;
-//         float total       = 0;
-//         int   count       = 0;
-
-//         file.clear();
-//         file.seekg(0);
-
-//         while (getline(file, line)) {
-//             string sID, cID, asgn, fp, plag, mrk, fb;
-//             stringstream ss2(line);
-//             getline(ss2, sID,  '|');
-//             getline(ss2, cID,  '|');
-//             getline(ss2, asgn, '|');
-//             getline(ss2, fp,   '|');
-//             getline(ss2, plag, '|');
-//             getline(ss2, mrk,  '|');
-//             getline(ss2, fb,   '|');
-
-//             if (asgn != assignment) continue;
-
-//             float markVal = stof(mrk);
-//             total += markVal;
-//             count++;
-
-//             if (markVal > highest) highest = markVal;
-//             if (markVal < lowest)  lowest  = markVal;
-
-//             if (sID == username) {
-//                 myMarks    = markVal;
-//                 myFeedback = fb;
-//             }
-//         }
-
-//         // Print this student's result
-//         cout << "\n=================================\n";
-//         cout << "ASSIGNMENT: " << assignment << "\n";
-//         cout << "=================================\n";
-
-//         if (myMarks != -1) {
-//             cout << "\n--- YOUR RESULT ---\n";
-//             cout << "Marks:    " << myMarks    << "\n";
-//             cout << "Feedback: " << myFeedback << "\n";
-//         } else {
-//             cout << "\nNo submission found for you\n";
-//         }
-
-//         // Print class statistics
-//         if (count > 0) {
-//             cout << "\n--- CLASS STATISTICS ---\n";
-//             cout << "Highest Marks: " << highest        << "\n";
-//             cout << "Lowest Marks:  " << lowest         << "\n";
-//             cout << "Average Marks: " << (total / count) << "\n";
-//         }
-
-//         cout << "=================================\n";
-
-//         file.clear();
-//         file.seekg(0);
-//     }
-
-//     file.close();
-// }
 void student::viewresult() {
     ifstream file("data/submission.txt");
     if (!file) {
@@ -639,64 +521,6 @@ void student::viewresult() {
 
     file.close();
 }
-
-// void student::viewresult(){
-
-//     ifstream file("data/submission.txt");
-
-//     if(!file){
-
-//         cout<<"Can not Open the File:: ";
-//         return ;
-
-//     }
-
-//     string line;
-
-//     bool fond=false;
-
-//      cout << "\n======= MY RESULTS =======\n";
-
-
-//      while(getline(file,line)){
-
-//         string std,cid,assign,fp,plag,marks,feeback;
-
-//         stringstream ss(line);
-
-//         getline(ss, std, '|');
-//         getline(ss, cid, '|');
-//         getline(ss, assign, '|');
-//         getline(ss, fp, '|');
-//         getline(ss, plag, '|');
-//         getline(ss, marks, '|');
-//         getline(ss, feeback, '|');
-
-//         if(std == username){
-
-//             fond=true;
-
-//             cout<<"\nCourse ID: "<<cid<<endl;
-//             cout<<"\nAssignment: "<<assign<<endl;
-//             cout<<"\nPlagiarism Score: "<<plag<<endl;
-//             cout<<"\nMarks: "<<marks<<endl;
-//             cout<<"\nFeedback: "<<feeback<<endl;
-
-//             cout<<"_____________________________"<<endl;
-
-
-//         }
-
-//      }
-
-//      if(!fond){
-//         cout<<"\nNo Results found: \n";
-
-//      }
-
-//      file.close();
-
-// }
 
 void student::askquery(){
 

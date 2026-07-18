@@ -4,8 +4,6 @@ void auth::init(){
 
     ifstream file("data/users.txt");
 
-    // ✅ FIX:
-    // Create default admin ONLY if file does not exist
 
     if(!file.is_open()){
 
@@ -17,7 +15,7 @@ void auth::init(){
             return;
         }
 
-        out << "admin admin123 admin\n";
+        out << "admin admin123 admin\n";        //creating defualt admin if not existed
 
         out.close();
     }
@@ -33,11 +31,8 @@ User* auth::login(){
     cout << "Enter Password: \n";
     getline(cin >> ws, p);
 
-    ifstream file("data/users.txt");
+    ifstream file("data/users.txt");            //file handling
 
-    // ✅ FIX:
-    // REMOVED THIS WRONG LINE:
-    // cout << "Default admin created\n";
 
     string fu, fp, fr;
 
@@ -47,17 +42,17 @@ User* auth::login(){
 
             if(fr == "admin"){
 
-                return new admin(fu, fp);
+                return new admin(fu, fp);       //admin file opens
             }
 
             else if(fr == "teacher"){
 
-                return new teacher(fu, fp);
+                return new teacher(fu, fp);         //teacher file ope ns
             }
 
             else if(fr == "student"){
 
-                return new student(fu, fp);
+                return new student(fu, fp);         //student file opens
             }
         }
     }
@@ -72,9 +67,6 @@ User* auth::login(){
 void auth::adduser(string u, string p, string r){
 
     ofstream out("data/users.txt", ios::app);
-
-    // ✅ FIX:
-    // CONSISTENT SPACE FORMAT
 
     out << u << " "
         << p << " "

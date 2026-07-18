@@ -3,8 +3,15 @@
 
 #include "User.h"
 #include "../pleg/plageng.h"
+#include <filesystem>
+#include <sstream>
+#include <fstream>
+#include <cstdio>
+#include <vector>
+#include <memory>
+#include <array>
 
-class student : public User {
+class student : public User {           //inheritence
 public:
     student(string u, string p);
     void menu();

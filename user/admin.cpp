@@ -2,7 +2,7 @@
 #include "../auth/auth.h"
 #include "../announcement/announcement.h"
 
-#include <sstream>   // ✅ REQUIRED FOR stringstream
+#include <sstream>   
 #include <cstdio>
 
 admin::admin(string u, string p) : User(u,p,"admin") {}
@@ -78,7 +78,7 @@ void admin::adduser(){
     cout<<"Enter Role: ";
     getline(cin>>ws,r);
 
-    auth::adduser(u,p,r);
+    auth::adduser(u,p,r);           //passing to adduser in auth file
 
     cout<<"User Added Successfully\n";
 }
@@ -116,7 +116,7 @@ void admin::deluser(){
     getline(cin>>ws,target);
 
     ifstream file("data/users.txt");
-    ofstream temp("data/temp.txt");
+    ofstream temp("data/temp.txt");         //to store new file here temporary
 
     string u,p,r;
 
@@ -133,15 +133,15 @@ void admin::deluser(){
 
         else{
 
-            found = true;
+            found = true;       //flag
         }
     }
 
     file.close();
     temp.close();
 
-    remove("data/users.txt");
-    rename("data/temp.txt","data/users.txt");
+    remove("data/users.txt");           //old file delete
+        rename("data/temp.txt","data/users.txt");       //renaming
 
     if(found)
         cout<<"User Deleted Successfully\n";
@@ -163,9 +163,8 @@ void admin::addcourse(){
     cout << "Enter course Teacher: ";
     getline(cin >> ws, teacher);
 
-    ofstream out("data/course.txt", ios::app);
+    ofstream out("data/course.txt", ios::app);      //ios::app append mde
 
-    // ✅ CONSISTENT FORMAT
     out << id << "|" << name << "|" << teacher << endl;
 
     out.close();
@@ -193,7 +192,7 @@ void admin::viewcourse(){
 
         stringstream ss(line);
 
-        // ✅ FIXED PIPE PARSING
+        //  PIPE PARSING
         getline(ss, id, '|');
         getline(ss, name, '|');
         getline(ss, teacher, '|');
@@ -232,7 +231,7 @@ void admin::assignteacher(){
 
         stringstream ss(line);
 
-        // ✅ FIXED PIPE PARSING
+        //  FIXED PIPE PARSING
         getline(ss, id, '|');
         getline(ss, name, '|');
         getline(ss, teacher, '|');
